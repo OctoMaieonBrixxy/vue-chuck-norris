@@ -1,8 +1,12 @@
 <template>
-  <div class="loading" v-if="loading">Loading ...</div>
-  <div class="content" v-else>
-    <p v-html="quote.value" />
+  <div>
+    <div class="loading" v-if="loading">Loading ...</div>
+    <div v-else>
+      <p v-html="quote.value" />
+    </div>
     <button
+      :disabled="loading"
+      v-bind:class="{ 'disabled-styles': loading }"
       class="fetch-random-quote-button"
       type="button"
       v-on:click="fetchRandomQuote"
@@ -18,6 +22,9 @@
 }
 </style>
 <style scoped>
+button.disabled-styles {
+  background-color: #63c787;
+}
 .loading {
   font-size: 30px;
   font-weight: bolder;
@@ -81,8 +88,8 @@ export default {
       const wrapStringBetweenSpan = string =>
         `<span class='chuck-norris-name'>${string}</span>`;
       return string
-        .replace(/Chuck Norris/, wrapStringBetweenSpan("Chuck Norris"))
-        .replace(/Chuck/, wrapStringBetweenSpan("Chuck"));
+        .replace(/Chuck Norris/g, wrapStringBetweenSpan("Chuck Norris"))
+        .replace(/Chuck/g, wrapStringBetweenSpan("Chuck"));
     },
     saveQuote(quote) {
       this.quote = Object.assign(quote, {
