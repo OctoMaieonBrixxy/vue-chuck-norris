@@ -1,11 +1,43 @@
 <template>
-  <h2 v-if="loading">Loading ...</h2>
-  <div v-else>
-    <p>{{ quote.value }}</p>
-    <button type="button" v-on:click="fetchRandomQuote">Another one</button>
+  <div class="loading" v-if="loading">Loading ...</div>
+  <div class="content" v-else>
+    <p v-html="quote.value" />
+    <button
+      class="fetch-random-quote-button"
+      type="button"
+      v-on:click="fetchRandomQuote"
+    >
+      Another one
+    </button>
   </div>
 </template>
 
+<style>
+.chuck-norris-name {
+  font-weight: bolder;
+}
+</style>
+<style scoped>
+.loading {
+  font-size: 30px;
+  font-weight: bolder;
+  color: #333;
+}
+.fetch-random-quote-button {
+  margin-top: 20px;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #76e29d;
+  font-size: 15px;
+  padding: 12px 20px;
+  outline-color: #76e29d;
+}
+.fetch-random-quote-button:active {
+  background-color: #63c787;
+}
+</style>
 <script>
 const TIMEOUT = 300;
 
@@ -19,11 +51,9 @@ export default {
       last_save: null
     };
   },
-
   mounted() {
     this.fetchRandomQuote();
   },
-
   methods: {
     showLogin() {
       let current_quote_last_save = Number(this.last_save);
@@ -47,8 +77,16 @@ export default {
         .then(response => response.json())
         .then(quote => this.saveQuote(quote));
     },
+    wrapChuckNorrisContentInHtmlTag(string) {
+      return string.replace(
+        /Chuck Norris/,
+        "<span class='chuck-norris-name'>Chuck Norris</span>"
+      );
+    },
     saveQuote(quote) {
-      this.quote = quote;
+      this.quote = Object.assign(quote, {
+        value: this.wrapChuckNorrisContentInHtmlTag(quote.value)
+      });
       this.last_save = Date.now();
       this.hideLogin();
     }
