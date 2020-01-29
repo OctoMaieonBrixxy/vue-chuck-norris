@@ -78,10 +78,11 @@ export default {
         .then(quote => this.saveQuote(quote));
     },
     wrapChuckNorrisContentInHtmlTag(string) {
-      return string.replace(
-        /Chuck Norris/,
-        "<span class='chuck-norris-name'>Chuck Norris</span>"
-      );
+      const wrapStringBetweenSpan = string =>
+        `<span class='chuck-norris-name'>${string}</span>`;
+      return string
+        .replace(/Chuck Norris/, wrapStringBetweenSpan("Chuck Norris"))
+        .replace(/Chuck/, wrapStringBetweenSpan("Chuck"));
     },
     saveQuote(quote) {
       this.quote = Object.assign(quote, {

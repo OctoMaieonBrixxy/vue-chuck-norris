@@ -9,10 +9,7 @@ import QuoteOfTheDay from "./QuoteOfTheDay";
 
 export default {
   name: "HomePage",
-  components: { QuoteOfTheDay },
-  props: {
-    msg: String
-  }
+  components: { QuoteOfTheDay }
 };
 </script>
 
