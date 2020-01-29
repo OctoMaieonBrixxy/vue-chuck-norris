@@ -1,24 +1,13 @@
-# vue-activity-tracker
+Chuck Norris API
 
-## Project setup
-```
-yarn install
-```
+Retrieve a random chuck joke in JSON format.
+https://api.chucknorris.io/jokes/random
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+Retrieve a random chuck norris joke from a given category.
+https://api.chucknorris.io/jokes/random?category={category}
 
-### Compiles and minifies for production
-```
-yarn build
-```
+Retrieve a list of available categories.
+https://api.chucknorris.io/jokes/categories
 
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Free text search.
+https://api.chucknorris.io/jokes/search?query={query}
