@@ -10,9 +10,7 @@
       class="fetch-random-quote-button"
       type="button"
       v-on:click="fetchRandomQuote"
-    >
-      Another one
-    </button>
+    >Another one</button>
   </div>
 </template>
 
@@ -51,6 +49,14 @@ const TIMEOUT = 300;
 export default {
   name: "QuoteOfTheDay",
 
+  props: {
+    fetchedQuote: {
+      type: Object,
+      required: true,
+      default: () => ({})
+    }
+  },
+
   data() {
     return {
       loading: true,
@@ -58,45 +64,52 @@ export default {
       last_save: null
     };
   },
+
+  watch: {
+    fetchedQuote(newValue) {
+      this.saveQuote(newValue);
+    }
+  },
+
   mounted() {
     this.fetchRandomQuote();
   },
+
   methods: {
-    showLogin() {
-      let current_quote_last_save = Number(this.last_save);
-      let is_not_initial_fetch = current_quote_last_save !== 0;
-
-      setTimeout(() => {
-        let request_hasnt_finished_yet =
-          current_quote_last_save === this.last_save;
-
-        if (is_not_initial_fetch && request_hasnt_finished_yet) {
-          this.loading = true;
-        }
-      }, TIMEOUT);
-    },
-    hideLogin() {
+    hideLoading() {
+      clearTimeout(this.timeoutId);
       this.loading = false;
     },
+    showLoading() {
+      this.timeoutId = setTimeout(() => {
+        this.loading = true;
+      }, TIMEOUT);
+    },
     fetchRandomQuote() {
-      this.showLogin();
+      this.showLoading();
       fetch("https://api.chucknorris.io/jokes/random")
         .then(response => response.json())
-        .then(quote => this.saveQuote(quote));
+        .then(quote => {
+          this.hideLoading();
+          this.saveQuote(quote);
+        });
     },
     wrapChuckNorrisContentInHtmlTag(string) {
       const wrapStringBetweenSpan = string =>
         `<span class='chuck-norris-name'>${string}</span>`;
-      return string
-        .replace(/Chuck Norris/g, wrapStringBetweenSpan("Chuck Norris"))
-        .replace(/Chuck/g, wrapStringBetweenSpan("Chuck"));
+      return (
+        string &&
+        string
+          .replace(/Chuck Norris/g, wrapStringBetweenSpan("Chuck Norris"))
+          .replace(/Chuck/g, wrapStringBetweenSpan("Chuck"))
+      );
     },
     saveQuote(quote) {
       this.quote = Object.assign(quote, {
         value: this.wrapChuckNorrisContentInHtmlTag(quote.value)
       });
       this.last_save = Date.now();
-      this.hideLogin();
+      this.hideLoading();
     }
   }
 };

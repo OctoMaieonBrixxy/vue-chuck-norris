@@ -1,15 +1,27 @@
 <template>
   <div class="homepage">
-    <QuoteOfTheDay />
+    <QuoteOfTheDay :fetchedQuote="quote" />
+    <hr />
+    <CategoryList @random_quote_from_category="value => quote = value" />
+    <hr />
+    <SearchModule />
   </div>
 </template>
 
 <script>
 import QuoteOfTheDay from "./QuoteOfTheDay";
+import CategoryList from "./CategoryList";
+import SearchModule from "./SearchModule";
 
 export default {
   name: "HomePage",
-  components: { QuoteOfTheDay }
+  components: { CategoryList, QuoteOfTheDay, SearchModule },
+  data() {
+    return {
+      quote: {}
+    };
+  },
+  mounted() {}
 };
 </script>
 
