@@ -46,7 +46,15 @@ export default {
   },
   watch: {
     search_text(newValue) {
-      this.fetchResults(newValue);
+      const MIN_CHAR_ALLOWED = 3;
+      const MAX_CHAR_ALLOWED = 120;
+
+      if (newValue.length < 3 || newValue.length > MAX_CHAR_ALLOWED) {
+        this.error_message = `la taille doit être comprise entre ${MIN_CHAR_ALLOWED} et ${MAX_CHAR_ALLOWED}`;
+      } else {
+        this.error_message = null;
+        this.fetchResults(newValue);
+      }
     }
   }
 };
